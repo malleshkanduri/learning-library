@@ -1,20 +1,6 @@
 {
   "items": [
     {
-      "id": "lmusfrgufcub2",
-      "title": "asdf",
-      "area": "General",
-      "description": "",
-      "status": "todo",
-      "estimate": 0,
-      "spent": 0,
-      "progress": 0,
-      "notes": "",
-      "resources": [],
-      "addedDate": "2026-10-03",
-      "completedDate": ""
-    },
-    {
       "id": "lmusqopn1ny8l",
       "title": "123",
       "area": "General",
