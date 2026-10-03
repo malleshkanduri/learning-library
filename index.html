@@ -758,54 +758,1282 @@ main{background:rgba(248,250,255,.55)}
   .utility-add .add-icon{width:32px!important;height:32px!important}
 }
 
+
+/* ===== Compact Add/Edit + GitHub dialogs (UI only) ===== */
+.overlay{background:rgba(18,27,45,.40)!important;backdrop-filter:blur(4px)!important}
+.modal{
+  width:min(700px,calc(100vw - 28px))!important;max-height:92vh!important;
+  border-radius:18px!important;background:#fff!important;border:1px solid #E0E6EF!important;
+  box-shadow:0 28px 80px rgba(24,35,59,.20)!important;overflow:auto!important
+}
+.modal-top{
+  position:sticky!important;top:0!important;z-index:8!important;padding:14px 18px!important;
+  background:rgba(255,255,255,.98)!important;border-bottom:1px solid #E6EBF2!important;
+  backdrop-filter:blur(12px)!important
+}
+.modal-top h2{font-size:17px!important;color:#182238!important;margin:0!important}
+.modal-sub{font-size:10.5px!important;color:#7B8799!important;margin-top:2px!important}
+.modal-top-actions{gap:6px!important}
+.modal-top-actions button{padding:7px 10px!important;font-size:12px!important}
+.modal .grid{padding:16px 18px 20px!important;gap:11px!important;background:#fff!important}
+.modal .field{
+  padding:0!important;border:0!important;background:transparent!important;
+  box-shadow:none!important;border-radius:0!important
+}
+.modal .field label{
+  font-size:10.5px!important;font-weight:700!important;color:#5E697D!important;
+  text-transform:none!important;letter-spacing:0!important
+}
+.modal .field input,.modal .field select,.modal .field textarea{
+  min-height:38px!important;padding:8px 10px!important;border:1px solid #DDE4EE!important;
+  border-radius:9px!important;background:#F8FAFC!important;color:#243047!important
+}
+.modal .field input:focus,.modal .field select:focus,.modal .field textarea:focus{
+  outline:none!important;background:#fff!important;border-color:#7890E6!important;
+  box-shadow:0 0 0 3px rgba(54,89,217,.08)!important
+}
+.modal .field textarea{min-height:72px!important}
+.modal .field:has([data-f="notes"]) textarea{background:#FFFCF4!important;border-color:#EDE2C3!important}
+#rlist .rrow{padding:5px!important;background:#F8FAFC!important;border:1px solid #E2E8F0!important;border-radius:9px!important}
+#addResource{margin-top:5px!important;background:#F1F5FF!important;color:#3659D9!important;border-color:#DCE4FF!important}
+.github-help{
+  padding:9px 10px!important;border-radius:9px!important;background:#F4F7FF!important;
+  border:1px solid #DFE6FA!important;color:#62708A!important;font-size:10.5px!important
+}
+.github-status{
+  margin-top:8px!important;padding:8px 10px!important;border-radius:8px!important;
+  background:#F8FAFC!important;border:1px solid #E3E8F0!important;font-size:10.5px!important
+}
+@media(max-width:640px){
+  .modal{width:calc(100vw - 12px)!important;max-height:96vh!important;border-radius:14px!important}
+  .modal .grid{grid-template-columns:1fr!important;padding:12px!important}
+  .modal .field{grid-column:1!important}
+}
+
+
+/* ===== Stable page layout refinement ===== */
+.stable-header{
+  position:sticky;top:0;z-index:20;height:auto!important;padding:0!important;
+  display:block!important;background:#fff!important;border-bottom:1px solid #E1E7F0!important
+}
+.header-main{
+  min-height:58px;display:grid;grid-template-columns:auto auto minmax(260px,1fr) auto;
+  align-items:center;gap:14px;padding:0 20px
+}
+.brand-wrap{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.header-main .tabs{margin:0!important}
+.header-search{display:flex;justify-content:flex-end;align-items:center;gap:7px;min-width:0}
+.header-search .nav-search{flex:1;max-width:310px;position:relative}
+.header-search .nav-search svg{
+  position:absolute;left:10px;top:10px;width:15px;height:15px;fill:none;stroke:#718096;
+  stroke-width:2;stroke-linecap:round;pointer-events:none
+}
+.header-search .nav-search input{
+  width:100%;height:36px;padding:0 10px 0 32px;border:1px solid #DCE3EE;
+  border-radius:9px;background:#F8FAFD;outline:none
+}
+.header-search #areaFilter{
+  height:36px;min-width:140px;max-width:175px;border:1px solid #DCE3EE;
+  border-radius:9px;background:#F8FAFD;padding:0 9px;color:#536078;font-weight:600
+}
+.header-icons{display:flex;align-items:center;gap:5px}
+.header-icons .top-icon{
+  width:34px;height:34px;border:1px solid #DCE3EE;border-radius:9px;background:#fff;
+  display:grid;place-items:center;color:#64748B;cursor:pointer
+}
+.header-icons .sync-icon{position:relative}
+.header-icons .sync-icon span{display:none}
+.header-icons .sync-icon:before{content:"☁";font-size:16px}
+.header-icons .sync-icon i{
+  position:absolute;right:3px;bottom:3px;width:8px;height:8px;border-radius:50%;
+  border:2px solid #fff;background:#8290A8
+}
+.header-icons .sync-icon.saving i{background:#E3A13B}
+.header-icons .sync-icon.ok i{background:#34A267}
+.header-icons .sync-icon.error i{background:#D95562}
+.header-tools{
+  min-height:38px;display:flex;justify-content:flex-end;align-items:center;
+  padding:3px 20px;border-top:1px solid #EDF0F5;background:#FAFBFD
+}
+.sort-control{position:relative;display:flex;align-items:center}
+.sort-symbol{position:absolute;left:9px;z-index:1;color:#687792;font-size:13px;pointer-events:none}
+.sort-control select{
+  height:31px;min-width:180px;padding:0 26px 0 29px;border:1px solid #DCE3EE;
+  border-radius:8px;background:#fff;color:#5F6880;font-size:11.5px;font-weight:650
+}
+
+/* existing layout becomes center + side-shell */
+.layout{grid-template-columns:minmax(0,1fr) 320px!important;min-height:calc(100vh - 96px)!important}
+main{padding:10px 20px 22px!important}
+.hero{display:none!important}
+.all-list{margin-top:0!important;gap:9px!important}
+
+.side-shell{
+  position:sticky;top:96px;height:calc(100vh - 96px);overflow:auto;
+  border-left:1px solid #E1E6EF;background:#F9FAFC;padding:12px 14px 20px
+}
+.side-action-grid{
+  display:grid;grid-template-columns:42px minmax(0,1fr);gap:7px;
+  padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid #E2E7EF
+}
+.side-add{
+  height:38px;border:0;border-radius:10px;background:#3659D9;color:#fff;
+  font-size:22px;line-height:1;cursor:pointer;box-shadow:0 4px 12px rgba(54,89,217,.18)
+}
+.side-browse{
+  height:38px;border:1px solid #D5DEF4;border-radius:10px;background:#F2F5FF;
+  color:#40517A;font-weight:750;cursor:pointer
+}
+.side{position:static!important;top:auto!important;height:auto!important;overflow:visible!important;
+  border-left:0!important;background:transparent!important;padding:0!important}
+
+@media(max-width:1050px){
+  .header-main{grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;padding:9px 14px}
+  .brand-wrap{grid-column:1;grid-row:1}
+  .header-icons{grid-column:3;grid-row:1}
+  .header-main .tabs{grid-column:1/-1;grid-row:2;justify-self:start}
+  .header-search{grid-column:2;grid-row:1}
+  .layout{grid-template-columns:1fr!important}
+  .side-shell{display:none}
+  main{padding:10px 14px 20px!important}
+}
+@media(max-width:720px){
+  .header-main{grid-template-columns:1fr auto;grid-template-rows:auto auto auto}
+  .brand-wrap{grid-column:1;grid-row:1}
+  .header-icons{grid-column:2;grid-row:1}
+  .header-main .tabs{grid-column:1/-1;grid-row:2;overflow-x:auto;width:100%}
+  .header-search{grid-column:1/-1;grid-row:3;width:100%}
+  .header-search .nav-search{max-width:none}
+  .header-search #areaFilter{min-width:120px}
+  .header-tools{padding:3px 14px}
+}
+
+
+/* ===== Single-row filter/sort refinement ===== */
+.stable-header .header-main{
+  grid-template-columns:auto auto minmax(430px,1fr) auto!important;
+  gap:11px!important;
+}
+.header-search{
+  justify-content:flex-start!important;
+  padding-left:4px!important;
+  gap:6px!important;
+}
+.header-search #areaFilter{
+  order:1;min-width:132px!important;max-width:150px!important
+}
+.header-search .nav-search{
+  order:2;flex:1 1 210px!important;max-width:285px!important
+}
+.header-search .sort-control{
+  order:3;position:relative;display:flex;align-items:center;height:36px
+}
+.header-search .sort-symbol{
+  position:absolute;left:9px;z-index:2;color:#5F6D86;font-size:14px;pointer-events:none
+}
+.header-search .sort-control select{
+  height:36px;min-width:128px;max-width:160px;
+  padding:0 25px 0 28px;border:1px solid #DCE3EE;border-radius:9px;
+  background:#F8FAFD;color:#536078;font-size:11.5px;font-weight:650;outline:none
+}
+.header-search .sort-control select:focus{
+  background:#fff;border-color:#91A2EA;box-shadow:0 0 0 3px rgba(54,89,217,.09)
+}
+/* No second utility row: content moves up */
+.layout{min-height:calc(100vh - 58px)!important}
+.side-shell{top:58px!important;height:calc(100vh - 58px)!important}
+main{padding-top:8px!important}
+
+@media(max-width:1120px){
+  .stable-header .header-main{
+    grid-template-columns:auto 1fr auto!important;
+    grid-template-rows:auto auto!important
+  }
+  .brand-wrap{grid-column:1!important;grid-row:1!important}
+  .header-icons{grid-column:3!important;grid-row:1!important}
+  .header-main .tabs{grid-column:1!important;grid-row:2!important}
+  .header-search{
+    grid-column:2 / 4!important;grid-row:2!important;
+    justify-content:flex-start!important;padding-left:0!important
+  }
+  .side-shell{top:104px!important;height:calc(100vh - 104px)!important}
+}
+@media(max-width:760px){
+  .stable-header .header-main{
+    grid-template-columns:1fr auto!important;
+    grid-template-rows:auto auto auto!important
+  }
+  .header-main .tabs{grid-column:1/-1!important;grid-row:2!important}
+  .header-search{
+    grid-column:1/-1!important;grid-row:3!important;
+    display:grid!important;grid-template-columns:120px minmax(0,1fr) 126px!important;
+    width:100%
+  }
+  .header-search #areaFilter,
+  .header-search .nav-search,
+  .header-search .sort-control{min-width:0!important;max-width:none!important;width:100%!important}
+  .header-search .sort-control select{width:100%!important;min-width:0!important}
+}
+@media(max-width:520px){
+  .header-search{grid-template-columns:115px minmax(0,1fr)!important}
+  .header-search .sort-control{grid-column:1/-1!important}
+}
+
+
+/* ===== Centered learning grid + refined status-card visual ===== */
+.all-list{
+  width:min(100%,980px)!important;
+  margin:0 auto!important;
+  gap:12px!important;
+}
+
+/* Remove the old thick status rail */
+.card,.card.todo,.card.doing,.card.done{
+  border-left:1px solid #E0E6EF!important;
+  position:relative!important;
+  overflow:hidden!important;
+  padding-top:15px!important;
+}
+
+/* Thin status accent across the top edge */
+.card::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:#D68A1F
+}
+.card.doing::before{background:#3276D7}
+.card.done::before{background:#26956A}
+
+/* Soft status tint, keeping the card itself crisp white */
+.card.todo{
+  background:linear-gradient(180deg,#FFFCF6 0,#FFFFFF 42px)!important;
+}
+.card.doing{
+  background:linear-gradient(180deg,#F5F9FF 0,#FFFFFF 42px)!important;
+}
+.card.done{
+  background:linear-gradient(180deg,#F3FBF7 0,#FFFFFF 42px)!important;
+  opacity:.94!important
+}
+.card.done:hover{opacity:1!important}
+
+/* Status badge becomes the primary status cue */
+.status-tag{
+  font-weight:750!important;border-radius:7px!important;padding:4px 8px!important;
+  letter-spacing:0!important
+}
+.status-tag.todo{
+  color:#A76612!important;background:#FFF2D8!important;border-color:#F1D6A5!important
+}
+.status-tag.doing{
+  color:#2463B5!important;background:#E7F1FF!important;border-color:#CFE1F8!important
+}
+.status-tag.done{
+  color:#247A58!important;background:#E5F6ED!important;border-color:#CBE8D8!important
+}
+
+/* A little more definition without heaviness */
+.card{
+  box-shadow:0 4px 13px rgba(33,48,74,.045)!important;
+}
+.card:hover{
+  border-color:#C8D3E3!important;
+  box-shadow:0 11px 27px rgba(33,48,74,.09)!important;
+}
+
+/* Centered grid scales naturally on wider screens */
+@media(min-width:1450px){
+  .all-list{width:min(100%,1040px)!important}
+}
+@media(max-width:1050px){
+  .all-list{width:min(100%,820px)!important}
+}
+@media(max-width:640px){
+  .all-list{width:100%!important}
+}
+
+
+/* ===== Slim glossy learning cards ===== */
+.all-list{
+  width:min(100%,1000px)!important;
+  margin:0 auto!important;
+  gap:10px!important;
+}
+
+.card,.card.todo,.card.doing,.card.done{
+  position:relative!important;
+  overflow:hidden!important;
+  padding:12px 14px!important;
+  border:1px solid rgba(207,217,232,.72)!important;
+  border-left:1px solid rgba(207,217,232,.72)!important;
+  border-radius:14px!important;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.96),rgba(248,251,255,.84))!important;
+  box-shadow:
+    0 5px 16px rgba(36,52,80,.055),
+    inset 0 1px 0 rgba(255,255,255,.95)!important;
+  backdrop-filter:blur(12px) saturate(120%)!important;
+  -webkit-backdrop-filter:blur(12px) saturate(120%)!important;
+  opacity:1!important;
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease!important;
+}
+
+/* Remove all edge/status bars from earlier designs */
+.card::before,.card.todo::before,.card.doing::before,.card.done::before{
+  display:none!important;content:none!important;
+}
+
+.card:hover{
+  transform:translateY(-2px)!important;
+  border-color:rgba(170,184,207,.82)!important;
+  box-shadow:
+    0 10px 25px rgba(36,52,80,.095),
+    inset 0 1px 0 rgba(255,255,255,1)!important;
+}
+
+/* Slim title row */
+.card .ctop{align-items:center!important;gap:7px!important}
+.card .title{
+  font-size:13.5px!important;font-weight:750!important;color:#1E2A40!important;
+  letter-spacing:-.012em!important
+}
+.card .area{
+  font-size:9.5px!important;padding:2px 7px!important;border-radius:99px!important;
+  background:#F1EEFF!important;color:#684CC3!important;border:1px solid #E2DCF9!important
+}
+
+/* Status becomes a compact glossy pill only */
+.status-tag{
+  padding:3px 7px!important;border-radius:99px!important;
+  font-size:9.5px!important;font-weight:800!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important
+}
+.status-tag.todo{
+  color:#9B6215!important;background:#FFF4DF!important;border:1px solid #F0D7AA!important
+}
+.status-tag.doing{
+  color:#245FAE!important;background:#EAF3FF!important;border:1px solid #D1E2F8!important
+}
+.status-tag.done{
+  color:#237653!important;background:#E8F7EF!important;border:1px solid #CEE9D9!important
+}
+
+/* Less vertical bulk */
+.card .desc{
+  margin:5px 0 8px!important;font-size:11.8px!important;line-height:1.42!important;
+  color:#69758A!important
+}
+.card .meta{gap:5px!important}
+.card .meta span{
+  padding:2px 5px!important;font-size:10px!important;border-radius:5px!important;
+  background:rgba(245,248,252,.86)!important;border:1px solid #E8EDF4!important;
+  color:#748095!important
+}
+
+/* Elegant thin progress */
+.card .progress{
+  height:4px!important;margin-top:8px!important;background:#EAEFF5!important;
+  border-radius:99px!important
+}
+.card .progress i{
+  border-radius:99px!important;
+  background:linear-gradient(90deg,#5A76DC,#3C5ED0)!important
+}
+.card.done .progress i{background:linear-gradient(90deg,#45AE80,#289566)!important}
+.card.todo .progress i{background:linear-gradient(90deg,#E7AC52,#D78A21)!important}
+
+/* Resources as subtle chips rather than blocks */
+.card .resources{
+  margin-top:8px!important;padding-top:7px!important;border-top:1px solid #EDF1F6!important;
+  display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;gap:5px!important
+}
+.card .resources a{
+  display:inline-flex!important;align-items:center!important;width:auto!important;
+  margin:0!important;padding:3px 7px!important;border-radius:7px!important;
+  font-size:10.5px!important;font-weight:650!important;
+  color:#3269AD!important;background:#F0F6FE!important;border:1px solid #DFEAF8!important
+}
+
+/* Notes are slim and integrated */
+.card .card-notes{
+  margin-top:7px!important;padding:6px 8px!important;border-radius:8px!important;
+  background:#FFF9EB!important;border:1px solid #F0E3C2!important;
+  border-left:1px solid #F0E3C2!important
+}
+.card .notes-label{font-size:8.5px!important;margin-bottom:2px!important}
+.card .notes-text{font-size:10.8px!important;line-height:1.4!important}
+.card .notes-more{font-size:9.5px!important;padding-top:2px!important}
+
+/* Completed remains fully legible; status is conveyed by pill/progress */
+.card.done{opacity:.96!important}
+.card.done:hover{opacity:1!important}
+
+@media(max-width:640px){
+  .card,.card.todo,.card.doing,.card.done{padding:11px 12px!important;border-radius:12px!important}
+}
+
+
+/* ===== Remove legacy left status rail completely ===== */
+.all-list .card,
+.all-list .card.todo,
+.all-list .card.doing,
+.all-list .card.done,
+#content .card,
+#content .card.todo,
+#content .card.doing,
+#content .card.done{
+  border-left-width:1px!important;
+  border-left-style:solid!important;
+  border-left-color:rgba(207,217,232,.72)!important;
+  box-shadow:
+    0 5px 16px rgba(36,52,80,.055),
+    inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+
+/* Kill any pseudo-element inherited from older status designs */
+.all-list .card::before,
+.all-list .card::after,
+#content .card::before,
+#content .card::after{
+  content:none!important;
+  display:none!important;
+  width:0!important;
+  height:0!important;
+  border:0!important;
+  background:none!important;
+}
+
+/* Status is conveyed only through pill + progress */
+.all-list .card.todo,
+#content .card.todo{
+  border-color:rgba(207,217,232,.72)!important;
+}
+.all-list .card.doing,
+#content .card.doing{
+  border-color:rgba(207,217,232,.72)!important;
+}
+.all-list .card.done,
+#content .card.done{
+  border-color:rgba(207,217,232,.72)!important;
+}
+
+
+/* Status-tinted fine border + right-side glow */
+.all-list .card,#content .card{border-width:1px!important;border-style:solid!important;background:#fff!important}
+.all-list .card.todo,#content .card.todo{
+ border-color:rgba(218,153,58,.38)!important;
+ background:radial-gradient(circle at 100% 48%,rgba(245,181,75,.12) 0,rgba(245,181,75,.055) 20%,rgba(255,255,255,0) 47%),linear-gradient(90deg,#fff 0%,#fff 67%,#FFFCF5 100%)!important}
+.all-list .card.doing,#content .card.doing{
+ border-color:rgba(67,123,207,.34)!important;
+ background:radial-gradient(circle at 100% 48%,rgba(80,145,235,.13) 0,rgba(80,145,235,.055) 20%,rgba(255,255,255,0) 47%),linear-gradient(90deg,#fff 0%,#fff 67%,#F6FAFF 100%)!important}
+.all-list .card.done,#content .card.done{
+ border-color:rgba(53,157,108,.34)!important;
+ background:radial-gradient(circle at 100% 48%,rgba(67,180,122,.12) 0,rgba(67,180,122,.05) 20%,rgba(255,255,255,0) 47%),linear-gradient(90deg,#fff 0%,#fff 67%,#F5FCF8 100%)!important}
+.all-list .card::before,.all-list .card::after,#content .card::before,#content .card::after{content:none!important;display:none!important}
+.all-list .card.todo:hover,#content .card.todo:hover{border-color:rgba(205,135,31,.55)!important;box-shadow:0 10px 25px rgba(156,107,35,.09)!important}
+.all-list .card.doing:hover,#content .card.doing:hover{border-color:rgba(48,108,199,.52)!important;box-shadow:0 10px 25px rgba(48,93,158,.10)!important}
+.all-list .card.done:hover,#content .card.done:hover{border-color:rgba(38,143,91,.50)!important;box-shadow:0 10px 25px rgba(41,120,79,.09)!important}
+
+
+/* ===== Stronger top-bar separation ===== */
+.stable-header{
+  background:linear-gradient(180deg,#EEF3FF 0%,#F6F8FD 100%)!important;
+  border-bottom:1px solid #CBD6E8!important;
+  box-shadow:0 5px 18px rgba(35,53,84,.075)!important
+}
+.header-main{
+  background:linear-gradient(100deg,#EDF3FF 0%,#F4F6FF 48%,#EEF7FA 100%)!important
+}
+.brand-wrap .brand{color:#1D2B49!important;font-weight:780!important}
+.logo{
+  background:linear-gradient(135deg,#405FD5,#6B55D8)!important;
+  box-shadow:0 5px 14px rgba(65,83,188,.24)!important
+}
+
+/* Status navigation is its own white segmented surface */
+.header-main .tabs{
+  background:rgba(255,255,255,.70)!important;
+  border:1px solid rgba(198,208,227,.82)!important;
+  box-shadow:0 3px 10px rgba(44,61,91,.055)!important
+}
+.header-main .tabs button{color:#64718A!important}
+.header-main .tabs button.on{
+  background:#FFFFFF!important;color:#3659D9!important;
+  box-shadow:0 2px 8px rgba(46,67,111,.10)!important
+}
+
+/* Search/filter controls stand off the tinted header */
+.header-search .nav-search input,
+.header-search #areaFilter,
+.header-search .sort-control select{
+  background:rgba(255,255,255,.88)!important;
+  border-color:#C9D5E7!important;
+  box-shadow:0 2px 7px rgba(42,59,90,.04)!important
+}
+
+/* Top utility icons get individual tinted tiles */
+.header-icons .top-icon{
+  background:#FFFFFF!important;border-color:#C9D5E7!important;
+  box-shadow:0 3px 9px rgba(41,58,88,.06)!important
+}
+.header-icons #syncPill{
+  background:#EAF8F1!important;color:#247A58!important;border-color:#C9E6D7!important
+}
+.header-icons #exportBtn{
+  background:#F2EEFF!important;color:#684CC3!important;border-color:#DDD5F7!important
+}
+
+/* Main content deliberately returns to a neutral surface */
+.layout{
+  background:#F7F9FC!important;
+  border-top:1px solid rgba(255,255,255,.8)!important
+}
+main{background:#F7F9FC!important}
+.side-shell,.side{
+  background:#F3F6FA!important
+}
+
+/* Right-side actions use stronger but complementary color blocks */
+.side-add{
+  background:linear-gradient(135deg,#3F63DC,#3151C6)!important;
+  box-shadow:0 5px 13px rgba(54,89,217,.20)!important
+}
+.side-browse{
+  background:#EAF1FF!important;color:#35599D!important;
+  border-color:#C9D9F2!important
+}
+.side-browse:hover{background:#DFE9FC!important;color:#284C91!important}
+
+/* Fine separator immediately below header */
+.stable-header::after{
+  content:"";display:block;height:1px;
+  background:linear-gradient(90deg,transparent,#AEBEDD 22%,#AEBEDD 78%,transparent);
+  opacity:.42
+}
+
+
+/* ===== DISTINCT NAV — deep indigo command bar ===== */
+.stable-header{
+  background:#17233F!important;
+  border-bottom:0!important;
+  box-shadow:0 8px 24px rgba(20,31,55,.18)!important
+}
+.header-main{
+  background:
+    radial-gradient(circle at 78% -60%,rgba(94,210,199,.20),transparent 36%),
+    linear-gradient(110deg,#17233F 0%,#202F55 58%,#19394E 100%)!important;
+  min-height:62px!important
+}
+.brand-wrap .brand{color:#F7F9FF!important;font-weight:780!important}
+.logo{
+  background:linear-gradient(135deg,#7C8FFF,#54CFC0)!important;
+  color:#fff!important;border:1px solid rgba(255,255,255,.20)!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.18)!important
+}
+
+/* Status nav floats as a translucent dark capsule */
+.header-main .tabs{
+  background:rgba(8,16,34,.26)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05)!important
+}
+.header-main .tabs button{color:#BFC9DE!important}
+.header-main .tabs button:hover{color:#fff!important;background:rgba(255,255,255,.06)!important}
+.header-main .tabs button.on{
+  background:#FFFFFF!important;color:#2948BE!important;
+  box-shadow:0 4px 13px rgba(0,0,0,.18)!important
+}
+
+/* Light controls on the dark command bar */
+.header-search .nav-search input,
+.header-search #areaFilter,
+.header-search .sort-control select{
+  background:rgba(255,255,255,.94)!important;
+  border-color:rgba(255,255,255,.18)!important;
+  color:#35425B!important;
+  box-shadow:0 4px 12px rgba(5,15,34,.12)!important
+}
+.header-search .nav-search svg{stroke:#64748B!important}
+.header-search .sort-symbol{color:#65738A!important}
+
+/* Utility icons become high-contrast compact tiles */
+.header-icons .top-icon{
+  border-color:rgba(255,255,255,.13)!important;
+  box-shadow:0 4px 12px rgba(5,15,34,.15)!important
+}
+.header-icons #syncPill{
+  background:#DDF7EB!important;color:#19734F!important;border-color:#BDE9D4!important
+}
+.header-icons #exportBtn{
+  background:#EEE9FF!important;color:#6549C0!important;border-color:#D7CDFB!important
+}
+
+/* Thin aqua accent line clearly terminates navigation */
+.stable-header::after{
+  content:""!important;display:block!important;height:3px!important;
+  background:linear-gradient(90deg,#6178F3 0%,#52CFC0 52%,#79DBB1 100%)!important;
+  opacity:1!important
+}
+
+/* Workspace is intentionally much lighter for strong contrast */
+.layout,main{background:#F6F8FC!important}
+.side-shell,.side{background:#F1F4F9!important}
+
+/* Right actions echo the nav palette */
+.side-add{
+  background:linear-gradient(135deg,#536DE3,#3654C8)!important;
+  color:#fff!important
+}
+.side-browse{
+  background:#E9EEF9!important;color:#334D83!important;border-color:#CCD7EB!important
+}
+
+@media(max-width:720px){
+  .header-main{
+    background:linear-gradient(145deg,#17233F,#203457)!important
+  }
+}
+
+
+/* ===== Softer navigation + clearly separated status group ===== */
+.stable-header{
+  background:#E9EEF6!important;
+  border-bottom:1px solid #CBD4E2!important;
+  box-shadow:0 5px 16px rgba(35,48,70,.08)!important
+}
+.header-main{
+  background:linear-gradient(110deg,#E7ECF5 0%,#EEF1F7 58%,#E5EEF1 100%)!important;
+}
+.brand-wrap .brand{color:#25334B!important}
+.logo{
+  background:linear-gradient(135deg,#5368B8,#4C8E91)!important;
+  color:#fff!important;border:0!important;
+  box-shadow:0 4px 11px rgba(50,66,100,.16)!important
+}
+
+/* Clearly defined status-navigation container */
+.header-main .tabs{
+  padding:4px!important;gap:3px!important;
+  background:#DDE4EF!important;
+  border:1px solid #C5CFDE!important;
+  border-radius:11px!important;
+  box-shadow:
+    inset 0 1px 2px rgba(47,61,86,.055),
+    0 1px 0 rgba(255,255,255,.75)!important
+}
+.header-main .tabs button{
+  color:#58657A!important;
+  border:1px solid transparent!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  font-weight:700!important
+}
+.header-main .tabs button:hover{
+  color:#2E3E5A!important;
+  background:rgba(255,255,255,.48)!important;
+  border-color:rgba(187,198,216,.72)!important
+}
+.header-main .tabs button.on{
+  color:#314F9D!important;
+  background:#FFFFFF!important;
+  border-color:#BFCBE0!important;
+  box-shadow:0 2px 7px rgba(41,56,84,.10)!important
+}
+
+/* Subtle status identity when a tab is selected */
+.header-main .tabs button[data-status="todo"].on{
+  color:#96601A!important;border-color:#DFC48F!important;background:#FFF9EE!important
+}
+.header-main .tabs button[data-status="doing"].on{
+  color:#315F9E!important;border-color:#AFC9E8!important;background:#F3F8FF!important
+}
+.header-main .tabs button[data-status="done"].on{
+  color:#287252!important;border-color:#ACD5C0!important;background:#F2FAF6!important
+}
+
+/* Softer controls on the header */
+.header-search .nav-search input,
+.header-search #areaFilter,
+.header-search .sort-control select{
+  background:#F8FAFC!important;
+  border-color:#C8D2E0!important;
+  color:#445168!important;
+  box-shadow:0 1px 4px rgba(43,57,82,.035)!important
+}
+.header-search .nav-search svg{stroke:#6A778B!important}
+.header-search .sort-symbol{color:#69768A!important}
+
+.header-icons .top-icon{
+  background:#F7F9FC!important;
+  border-color:#C8D2E0!important;
+  color:#59677D!important;
+  box-shadow:0 2px 6px rgba(42,56,82,.04)!important
+}
+.header-icons #syncPill{
+  background:#EEF7F3!important;color:#39745D!important;border-color:#C8DFD4!important
+}
+.header-icons #exportBtn{
+  background:#F1EFF8!important;color:#665A8E!important;border-color:#D8D2E7!important
+}
+
+/* Remove bright accent stripe; use a quiet separator */
+.stable-header::after{
+  content:""!important;display:block!important;height:2px!important;
+  background:linear-gradient(90deg,#BBC6D7,#9FB2C4,#BBC6D7)!important;
+  opacity:.55!important
+}
+
+.layout,main{background:#F6F7FA!important}
+.side-shell,.side{background:#F0F3F7!important}
+
+
+/* ===== Slightly brighter soft navigation ===== */
+.stable-header{
+  background:#F0F4FC!important;
+  border-bottom-color:#C9D5E7!important;
+  box-shadow:0 5px 17px rgba(40,57,87,.075)!important
+}
+.header-main{
+  background:linear-gradient(110deg,#EEF3FF 0%,#F5F7FD 55%,#EDF7F7 100%)!important
+}
+.logo{
+  background:linear-gradient(135deg,#5D73D7,#45A4A0)!important;
+  box-shadow:0 5px 13px rgba(62,84,137,.19)!important
+}
+.brand-wrap .brand{color:#20304C!important}
+
+/* brighter but still contained status grid */
+.header-main .tabs{
+  background:#E3EAF5!important;
+  border-color:#BFCDE1!important;
+  box-shadow:inset 0 1px 2px rgba(47,61,86,.045),0 2px 5px rgba(50,67,98,.045)!important
+}
+.header-main .tabs button{color:#52617A!important}
+.header-main .tabs button:hover{
+  background:#F6F8FD!important;color:#30425F!important;border-color:#C2CEE0!important
+}
+.header-main .tabs button.on{
+  background:#FFFFFF!important;color:#3456B3!important;border-color:#AFC0DF!important;
+  box-shadow:0 3px 8px rgba(48,66,104,.10)!important
+}
+.header-main .tabs button[data-status="todo"].on{
+  background:#FFF8E9!important;color:#9A6115!important;border-color:#E7C781!important
+}
+.header-main .tabs button[data-status="doing"].on{
+  background:#EDF6FF!important;color:#2764AF!important;border-color:#A8C9ED!important
+}
+.header-main .tabs button[data-status="done"].on{
+  background:#ECF9F2!important;color:#217653!important;border-color:#9FD3B8!important
+}
+
+/* brighter white utility controls */
+.header-search .nav-search input,
+.header-search #areaFilter,
+.header-search .sort-control select{
+  background:#FFFFFF!important;border-color:#C5D2E4!important;
+  box-shadow:0 2px 7px rgba(44,61,91,.045)!important
+}
+.header-icons #syncPill{
+  background:#E9F8F0!important;color:#267654!important;border-color:#B8DEC9!important
+}
+.header-icons #exportBtn{
+  background:#F0EDFF!important;color:#654DC1!important;border-color:#CEC4F1!important
+}
+.stable-header::after{
+  background:linear-gradient(90deg,#B4C4E4,#8EBCC4,#B4C4E4)!important;
+  opacity:.72!important
+}
+
+/* keep workspace bright and neutral */
+.layout,main{background:#F8F9FC!important}
+.side-shell,.side{background:#F3F6FA!important}
+
+
+/* ===== Typography identity: brand + status navigation ===== */
+
+/* Brand: editorial/product feel */
+.brand-wrap .brand{
+  font-family:"Segoe UI Variable Display","Aptos Display","Trebuchet MS",sans-serif!important;
+  font-size:18px!important;
+  font-weight:800!important;
+  letter-spacing:-.035em!important;
+  color:#20304C!important;
+  line-height:1!important
+}
+.brand-wrap .brand::first-letter{letter-spacing:-.05em}
+
+/* Status navigation: compact uppercase command labels */
+.header-main .tabs button{
+  font-family:"Segoe UI Variable Text","Aptos","Segoe UI",sans-serif!important;
+  font-size:10.5px!important;
+  font-weight:800!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  line-height:1!important;
+  padding:9px 12px!important
+}
+
+/* Give each status a subtle text identity even before selection */
+.header-main .tabs button[data-status="todo"]{color:#8D671F!important}
+.header-main .tabs button[data-status="doing"]{color:#42699C!important}
+.header-main .tabs button[data-status="done"]{color:#3E785D!important}
+.header-main .tabs button[data-status=""]{color:#4C5B73!important}
+
+/* Selected state remains stronger */
+.header-main .tabs button[data-status=""].on{
+  color:#304FA7!important;font-weight:850!important
+}
+.header-main .tabs button[data-status="todo"].on{
+  color:#955D10!important;font-weight:850!important
+}
+.header-main .tabs button[data-status="doing"].on{
+  color:#245FA8!important;font-weight:850!important
+}
+.header-main .tabs button[data-status="done"].on{
+  color:#20714F!important;font-weight:850!important
+}
+
+@media(max-width:640px){
+  .brand-wrap .brand{font-size:16px!important}
+  .header-main .tabs button{
+    font-size:9.5px!important;letter-spacing:.04em!important;padding:8px 9px!important
+  }
+}
+
+
+/* ===== Unified control typography ===== */
+button,input,select,textarea{
+  font-family:"Segoe UI Variable Text","Aptos","Segoe UI",sans-serif!important;
+}
+
+/* Filters, search, sort */
+.header-search input,
+.header-search select,
+.sort-control select{
+  font-size:11px!important;
+  font-weight:700!important;
+  letter-spacing:.018em!important;
+}
+.header-search input::placeholder{
+  font-weight:650!important;
+  letter-spacing:.015em!important;
+  color:#8792A5!important
+}
+
+/* Right-side primary controls */
+.side-add{
+  font-family:"Segoe UI Variable Display","Aptos Display","Segoe UI",sans-serif!important;
+  font-weight:650!important
+}
+.side-browse{
+  font-size:10.5px!important;
+  font-weight:800!important;
+  letter-spacing:.045em!important;
+  text-transform:uppercase!important
+}
+
+/* Progress-panel headings */
+.side h3{
+  font-family:"Segoe UI Variable Text","Aptos","Segoe UI",sans-serif!important;
+  font-size:9.5px!important;
+  font-weight:850!important;
+  letter-spacing:.09em!important;
+  text-transform:uppercase!important
+}
+.area-progress-card .ap-top b{
+  font-size:11.5px!important;
+  font-weight:800!important;
+  letter-spacing:-.008em!important
+}
+.area-progress-card .ap-top strong{
+  font-size:11px!important;
+  font-weight:850!important
+}
+
+/* Card metadata + actions */
+.card .title{
+  font-family:"Segoe UI Variable Display","Aptos Display","Segoe UI",sans-serif!important;
+  font-weight:780!important
+}
+.card .area{
+  font-size:9px!important;
+  font-weight:850!important;
+  letter-spacing:.045em!important;
+  text-transform:uppercase!important
+}
+.status-tag{
+  font-size:9px!important;
+  font-weight:850!important;
+  letter-spacing:.04em!important;
+  text-transform:uppercase!important
+}
+.card .meta span{
+  font-size:9.5px!important;
+  font-weight:650!important;
+  letter-spacing:.012em!important
+}
+.card .resources a{
+  font-size:10px!important;
+  font-weight:750!important;
+  letter-spacing:.01em!important
+}
+.notes-label{
+  font-size:8.5px!important;
+  font-weight:850!important;
+  letter-spacing:.08em!important;
+  text-transform:uppercase!important
+}
+.notes-more{
+  font-weight:800!important;
+  letter-spacing:.025em!important
+}
+
+/* All Items drawer */
+.library-head strong{
+  font-family:"Segoe UI Variable Display","Aptos Display","Segoe UI",sans-serif!important;
+  font-size:14px!important;
+  font-weight:800!important;
+  letter-spacing:-.015em!important
+}
+.library-head small{
+  font-size:9.5px!important;
+  font-weight:650!important;
+  letter-spacing:.02em!important
+}
+.library-filter label,.library-group-title{
+  font-size:9px!important;
+  font-weight:850!important;
+  letter-spacing:.085em!important;
+  text-transform:uppercase!important
+}
+.library-filter input,.library-filter select{
+  font-size:11px!important;
+  font-weight:650!important
+}
+.library-item .li-title{
+  font-size:11.5px!important;
+  font-weight:750!important
+}
+.library-item .li-plan{
+  font-size:9.5px!important;
+  font-weight:600!important
+}
+.library-item .li-status{
+  font-size:8.5px!important;
+  font-weight:800!important;
+  letter-spacing:.035em!important;
+  text-transform:uppercase!important
+}
+
+/* Add/Edit and GitHub dialogs */
+.modal-top h2{
+  font-family:"Segoe UI Variable Display","Aptos Display","Segoe UI",sans-serif!important;
+  font-weight:800!important;
+  letter-spacing:-.02em!important
+}
+.modal-sub{
+  font-weight:650!important;
+  letter-spacing:.015em!important
+}
+.modal .field label{
+  font-size:9.5px!important;
+  font-weight:850!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important
+}
+.modal .field input,
+.modal .field select,
+.modal .field textarea{
+  font-size:11.5px!important;
+  font-weight:600!important
+}
+.modal-top-actions button,
+#addResource{
+  font-size:10px!important;
+  font-weight:800!important;
+  letter-spacing:.035em!important;
+  text-transform:uppercase!important
+}
+.github-help,.github-status{
+  font-size:10px!important;
+  font-weight:600!important;
+  letter-spacing:.008em!important
+}
+
+/* Export / sync icon tool controls retain clean icon appearance */
+.header-icons .top-icon{
+  font-weight:800!important
+}
+
+
+/* ===== Polished color system: cool pearl + sapphire + jade ===== */
+:root{
+  --page:#F5F7FB!important;
+  --surface:#FFFFFF!important;
+  --surface2:#F8FAFD!important;
+  --surface3:#EEF2F7!important;
+  --border:#D9E1EC!important;
+  --border2:#C7D2E1!important;
+  --text:#182338!important;
+  --muted:#68758A!important;
+  --faint:#98A3B3!important;
+  --accent:#4967D8!important;
+  --accent2:#3652BE!important;
+  --accent-soft:#EEF2FF!important;
+  --todo:#C98228!important;
+  --todo-soft:#FFF6E7!important;
+  --doing:#3977C9!important;
+  --doing-soft:#EEF6FF!important;
+  --done:#2D916A!important;
+  --done-soft:#EDF8F3!important;
+  --violet:#735CC5!important;
+  --violet-soft:#F3F0FC!important;
+}
+
+/* Calm pearl workspace */
+body,.layout,main{
+  background:
+    radial-gradient(circle at 14% 5%,rgba(89,112,205,.045),transparent 28%),
+    linear-gradient(180deg,#F8F9FC 0%,#F3F6FA 100%)!important;
+  color:#182338!important
+}
+
+/* Header: slightly richer than content, but not loud */
+.stable-header{
+  background:#EAF0F8!important;
+  border-bottom:1px solid #C7D3E2!important;
+  box-shadow:0 5px 18px rgba(37,53,80,.075)!important
+}
+.header-main{
+  background:
+    radial-gradient(circle at 82% -30%,rgba(79,157,154,.09),transparent 30%),
+    linear-gradient(110deg,#E9EFF9 0%,#F2F5FA 52%,#EAF4F3 100%)!important
+}
+.brand-wrap .brand{color:#21314D!important}
+.logo{
+  background:linear-gradient(145deg,#526DD0,#4B9692)!important;
+  box-shadow:0 5px 14px rgba(54,74,120,.18)!important
+}
+
+/* Status selector: crisp neutral frame with tasteful state colors */
+.header-main .tabs{
+  background:#DCE4F0!important;
+  border-color:#BCC9DB!important;
+  box-shadow:inset 0 1px 2px rgba(40,55,80,.045),0 2px 5px rgba(40,55,80,.04)!important
+}
+.header-main .tabs button{color:#56647B!important}
+.header-main .tabs button:hover{
+  background:#F7F9FC!important;color:#31425D!important;border-color:#C4D0E0!important
+}
+.header-main .tabs button[data-status=""].on{
+  background:#F8FAFF!important;color:#405CB7!important;border-color:#AEBEDF!important
+}
+.header-main .tabs button[data-status="todo"].on{
+  background:#FFF6E6!important;color:#9A6016!important;border-color:#DFC28A!important
+}
+.header-main .tabs button[data-status="doing"].on{
+  background:#EEF6FF!important;color:#2B65A9!important;border-color:#A8C7E9!important
+}
+.header-main .tabs button[data-status="done"].on{
+  background:#EDF8F3!important;color:#277553!important;border-color:#A9D3BE!important
+}
+
+/* Controls */
+.header-search .nav-search input,
+.header-search #areaFilter,
+.header-search .sort-control select{
+  background:rgba(255,255,255,.92)!important;
+  border-color:#C5D1E0!important;
+  color:#445169!important;
+  box-shadow:0 2px 7px rgba(42,57,84,.04)!important
+}
+.header-search .nav-search input:focus,
+.header-search #areaFilter:focus,
+.header-search .sort-control select:focus{
+  border-color:#879BE0!important;
+  box-shadow:0 0 0 3px rgba(73,103,216,.09)!important
+}
+.header-icons #syncPill{
+  background:#EAF7F1!important;color:#287656!important;border-color:#BFDDCE!important
+}
+.header-icons #exportBtn{
+  background:#F0EEFA!important;color:#65549C!important;border-color:#D2CAE8!important
+}
+.stable-header::after{
+  background:linear-gradient(90deg,#AEBFDD,#83B8B4,#AEBFDD)!important;
+  opacity:.62!important
+}
+
+/* Right panel */
+.side-shell,.side{background:#F0F4F8!important}
+.side-action-grid{border-bottom-color:#DCE4EE!important}
+.side-add{
+  background:linear-gradient(145deg,#526DD5,#405CC3)!important;
+  box-shadow:0 5px 14px rgba(65,87,180,.19)!important
+}
+.side-browse{
+  background:#E9EFFA!important;color:#3D568B!important;border-color:#C9D5E8!important
+}
+.side-browse:hover{background:#E1E9F7!important;color:#304C87!important}
+.area-progress-card{
+  background:#FCFDFE!important;border-color:#DDE4ED!important;
+  box-shadow:0 3px 10px rgba(36,50,74,.035)!important
+}
+
+/* Cards: pearl glass with restrained status border/right glow */
+.all-list .card,#content .card{
+  color:#1C2940!important;
+  box-shadow:0 5px 16px rgba(36,52,80,.05),inset 0 1px 0 rgba(255,255,255,.95)!important
+}
+.all-list .card.todo,#content .card.todo{
+  border-color:rgba(201,130,40,.34)!important;
+  background:
+    radial-gradient(circle at 100% 48%,rgba(225,158,63,.105),transparent 42%),
+    linear-gradient(90deg,#FFF 0%,#FFF 72%,#FFFCF6 100%)!important
+}
+.all-list .card.doing,#content .card.doing{
+  border-color:rgba(57,119,201,.31)!important;
+  background:
+    radial-gradient(circle at 100% 48%,rgba(66,130,214,.105),transparent 42%),
+    linear-gradient(90deg,#FFF 0%,#FFF 72%,#F7FAFF 100%)!important
+}
+.all-list .card.done,#content .card.done{
+  border-color:rgba(45,145,106,.31)!important;
+  background:
+    radial-gradient(circle at 100% 48%,rgba(49,157,113,.095),transparent 42%),
+    linear-gradient(90deg,#FFF 0%,#FFF 72%,#F7FCF9 100%)!important
+}
+.card .title{color:#1B2941!important}
+.card .area{
+  background:#F1EEFA!important;color:#6754A7!important;border-color:#DDD6EF!important
+}
+.status-tag.todo{background:#FFF3DD!important;color:#956018!important;border-color:#ECD4A8!important}
+.status-tag.doing{background:#EAF3FF!important;color:#2B65A9!important;border-color:#D0E1F5!important}
+.status-tag.done{background:#E8F6EF!important;color:#287553!important;border-color:#CDE6D8!important}
+.card .meta span{background:#F6F8FB!important;color:#748096!important;border-color:#E5EAF1!important}
+.card .resources a{
+  background:#EEF5FD!important;color:#3168A5!important;border-color:#D9E7F6!important
+}
+.card .card-notes{
+  background:#FFF9EC!important;border-color:#EFE1BC!important
+}
+.notes-label{color:#906B2A!important}
+
+/* Dialogs */
+.modal{background:#FFFFFF!important;border-color:#DCE3EC!important}
+.modal-top{background:rgba(252,253,255,.98)!important;border-bottom-color:#E5EAF1!important}
+.modal-top-actions .primary{background:#4967D8!important}
+.modal-top-actions .primary:hover{background:#3652BE!important}
+.modal .field input,.modal .field select,.modal .field textarea{
+  background:#F8FAFC!important;border-color:#DCE3EC!important
+}
+.modal .field input:focus,.modal .field select:focus,.modal .field textarea:focus{
+  border-color:#8297E0!important;box-shadow:0 0 0 3px rgba(73,103,216,.08)!important
+}
+.github-help{background:#F2F5FC!important;border-color:#DDE5F3!important}
+
+
+/* ===== Clean status cards: no gradient, explicit status label ===== */
+.all-list .card,
+#content .card,
+.all-list .card.todo,
+#content .card.todo,
+.all-list .card.doing,
+#content .card.doing,
+.all-list .card.done,
+#content .card.done{
+  background:#FFFFFF!important;
+  background-image:none!important;
+}
+
+/* Keep only the fine status-tinted outline */
+.all-list .card.todo,#content .card.todo{border-color:rgba(201,130,40,.38)!important}
+.all-list .card.doing,#content .card.doing{border-color:rgba(57,119,201,.36)!important}
+.all-list .card.done,#content .card.done{border-color:rgba(45,145,106,.36)!important}
+
+/* Status text becomes a clearer visual identifier */
+.status-tag{
+  min-width:76px!important;
+  text-align:center!important;
+  justify-content:center!important;
+  padding:4px 9px!important;
+  border-radius:8px!important;
+  font-size:9px!important;
+  font-weight:850!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+  box-shadow:none!important
+}
+.status-tag.todo{
+  background:#FFF3DD!important;color:#9A6117!important;border:1px solid #EACF9E!important
+}
+.status-tag.doing{
+  background:#EAF3FF!important;color:#2864A9!important;border:1px solid #C9DDF4!important
+}
+.status-tag.done{
+  background:#E8F6EF!important;color:#287553!important;border:1px solid #C8E2D4!important
+}
+
+/* Neutral hover elevation; border remains status-specific */
+.all-list .card:hover,#content .card:hover{
+  box-shadow:0 10px 24px rgba(35,50,76,.085)!important
+}
+
+
+/* ===== Variant: status-colored item titles ===== */
+.card .title{
+  font-weight:800!important;
+  letter-spacing:-.012em!important;
+  transition:color .15s ease!important
+}
+.card.todo .title{
+  color:#A86716!important
+}
+.card.doing .title{
+  color:#2868B2!important
+}
+.card.done .title{
+  color:#267A56!important
+}
+
+/* Keep the rest of the card neutral so the title becomes the focal status cue */
+.card .desc{color:#68758A!important}
+.card:hover .title{filter:saturate(1.08) brightness(.94)}
+
 </style>
 </head>
 <body>
 <div class="app">
-<header class="topbar">
-  <div class="brand-wrap"><div class="logo">K</div><div class="brand">Learning Library</div></div>
-  <nav class="tabs primary-tabs" id="statusTabs">
-  <button class="on" data-status="">All</button>
-  <button data-status="todo">To Do</button>
-  <button data-status="doing">In Progress</button>
-  <button data-status="done">Completed</button>
-
-</nav>
-
-<div class="primary-actions">
-  <button class="top-icon sync-icon local" id="syncPill" title="Save & sync status: Local auto-save" aria-label="Save and sync status">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .7-7.9A6.5 6.5 0 0 0 5.4 9.2 4.5 4.5 0 0 0 7 18Z"/><path d="m9.5 13.5 1.8 1.8 3.5-3.8"/></svg>
-    <i aria-hidden="true"></i>
-  </button>
-  
-  <button class="top-icon" id="exportBtn" title="Export learning data" aria-label="Export learning data">
-    <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M5 20h14"/></svg>
-  </button>
-  
-</div>
-  <div class="top-actions">
-<div class="nav-filters">
-  <div class="nav-search">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
-    <input id="search" type="search" placeholder="Search learning…">
+<header class="stable-header">
+  <div class="header-main">
+    <div class="brand-wrap"><div class="logo">K</div><div class="brand">Learning Library</div></div>
+    <nav class="tabs" id="statusTabs">
+      <button class="on" data-status="">All</button>
+      <button data-status="todo">To Do</button>
+      <button data-status="doing">In Progress</button>
+      <button data-status="done">Completed</button>
+    </nav>
+    <div class="header-search">
+      <select id="areaFilter" aria-label="Filter by track"><option value="">All Tracks</option></select>
+      <div class="nav-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
+        <input id="search" type="search" placeholder="Search learning…">
+      </div>
+      <div class="sort-control" title="Sort learning items">
+        <span class="sort-symbol" aria-hidden="true">⇅</span>
+        <select id="sortFilter" aria-label="Sort learning items">
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+          <option value="recentCompleted">Recently completed</option>
+          <option value="area">Track</option>
+          <option value="progress">Progress</option>
+        </select>
+      </div>
+    </div>
+    <div class="header-icons">
+      <button class="top-icon sync-icon local" id="syncPill" title="Save & sync status" aria-label="Save and sync status"><i></i><span>Local auto-save</span></button>
+      <button class="top-icon" id="exportBtn" title="Export learning data" aria-label="Export learning data">⇩</button>
+    </div>
   </div>
-  <select id="areaFilter" aria-label="Filter by Track" title="Track"><option value="">All Tracks</option></select>
-  <div class="sort-control" title="Sort learning items">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h9M8 18h6"/><path d="M4 5v14M2 17l2 2 2-2"/></svg>
-    <select id="sortFilter" aria-label="Sort learning items">
-      <option value="newest">Sort: Newest</option>
-      <option value="oldest">Sort: Oldest</option>
-      <option value="recentCompleted">Sort: Recently completed</option>
-      <option value="area">Sort: Track</option>
-      <option value="progress">Sort: Progress</option>
-    </select>
-  </div>
-</div>
-<div class="utility-add"><button class="top-icon add-icon" id="addBtn" title="Add learning item" aria-label="Add learning item">
-    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-  </button></div>
-<button class="ghost" id="libraryBtn">☰ All Items</button>
-</div>
 </header>
 <div class="layout">
 <main>
@@ -813,7 +2041,13 @@ main{background:rgba(248,250,255,.55)}
   </div>
   <div id="content"></div>
 </main>
-<aside class="side" id="side"></aside>
+<aside class="side-shell">
+  <div class="side-action-grid">
+    <button class="side-add" id="addBtn" title="Add learning item">+</button>
+    <button class="side-browse" id="libraryBtn">☰ All Items</button>
+  </div>
+  <aside class="side" id="side"></aside>
+</aside>
 </div>
 </div>
 <aside class="library-drawer" id="libraryDrawer">
