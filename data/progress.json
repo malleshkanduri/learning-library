@@ -1,25 +1,6 @@
 {
   "items": [
     {
-      "id": "a2",
-      "title": "Model Context Protocol",
-      "area": "Agentic AI",
-      "description": "Learn MCP architecture, tools, resources and servers.",
-      "status": "todo",
-      "estimate": 8,
-      "spent": 0,
-      "progress": 0,
-      "notes": "",
-      "resources": [
-        {
-          "title": "MCP documentation",
-          "url": "https://modelcontextprotocol.io/"
-        }
-      ],
-      "addedDate": "2026-10-03",
-      "completedDate": ""
-    },
-    {
       "id": "a3",
       "title": "Kubernetes architecture",
       "area": "Kubernetes",
