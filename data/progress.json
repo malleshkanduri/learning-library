@@ -1,20 +1,6 @@
 {
   "items": [
     {
-      "id": "lmusfmr3447ht",
-      "title": "123",
-      "area": "General",
-      "description": "",
-      "status": "todo",
-      "estimate": 0,
-      "spent": 0,
-      "progress": 0,
-      "notes": "",
-      "resources": [],
-      "addedDate": "2026-10-03",
-      "completedDate": ""
-    },
-    {
       "id": "lmusfrgufcub2",
       "title": "asdf",
       "area": "General",
@@ -41,6 +27,20 @@
       "resources": [],
       "addedDate": "2026-10-03",
       "completedDate": ""
+    },
+    {
+      "id": "lmusqow19plwd",
+      "title": "124",
+      "area": "General",
+      "description": "",
+      "status": "done",
+      "estimate": 0,
+      "spent": 0,
+      "progress": 0,
+      "notes": "",
+      "resources": [],
+      "addedDate": "2026-10-03",
+      "completedDate": "2026-10-03"
     }
   ],
   "weeklyTarget": 10
