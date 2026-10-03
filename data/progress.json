@@ -2,7 +2,7 @@
   "items": [
     {
       "id": "a1",
-      "title": "LangGraph fundamentals",
+      "title": "LangGraph fundamentals123",
       "area": "Agentic AI",
       "description": "Understand graphs, state, nodes and conditional edges.",
       "status": "doing",
@@ -93,6 +93,20 @@
     {
       "id": "lmurrmzn9ayc1",
       "title": "asdfasdf",
+      "area": "General",
+      "description": "",
+      "status": "todo",
+      "estimate": 0,
+      "spent": 0,
+      "progress": 0,
+      "notes": "",
+      "resources": [],
+      "addedDate": "2026-10-03",
+      "completedDate": ""
+    },
+    {
+      "id": "lmusfmr3447ht",
+      "title": "123",
       "area": "General",
       "description": "",
       "status": "todo",
