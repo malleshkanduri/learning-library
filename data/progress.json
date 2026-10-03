@@ -1,4 +1,81 @@
 {
-  "items": [],
+  "items": [
+    {
+      "id": "a1",
+      "title": "LangGraph fundamentals",
+      "area": "Agentic AI",
+      "description": "Understand graphs, state, nodes and conditional edges.",
+      "status": "doing",
+      "estimate": 6,
+      "spent": 2,
+      "progress": 35,
+      "notes": "",
+      "resources": [
+        {
+          "title": "LangGraph documentation",
+          "url": "https://langchain-ai.github.io/langgraph/"
+        }
+      ],
+      "addedDate": "2026-10-03",
+      "completedDate": ""
+    },
+    {
+      "id": "a2",
+      "title": "Model Context Protocol",
+      "area": "Agentic AI",
+      "description": "Learn MCP architecture, tools, resources and servers.",
+      "status": "todo",
+      "estimate": 8,
+      "spent": 0,
+      "progress": 0,
+      "notes": "",
+      "resources": [
+        {
+          "title": "MCP documentation",
+          "url": "https://modelcontextprotocol.io/"
+        }
+      ],
+      "addedDate": "2026-10-03",
+      "completedDate": ""
+    },
+    {
+      "id": "a3",
+      "title": "Kubernetes architecture",
+      "area": "Kubernetes",
+      "description": "Control plane, nodes, pods and core Kubernetes objects.",
+      "status": "todo",
+      "estimate": 7,
+      "spent": 0,
+      "progress": 0,
+      "notes": "",
+      "resources": [
+        {
+          "title": "Kubernetes Concepts",
+          "url": "https://kubernetes.io/docs/concepts/"
+        }
+      ],
+      "addedDate": "2026-10-03",
+      "completedDate": ""
+    },
+    {
+      "id": "a4",
+      "title": "Python async programming",
+      "area": "Python Advanced",
+      "description": "async/await, tasks and event loops.",
+      "status": "done",
+      "estimate": 5,
+      "spent": 5,
+      "progress": 100,
+      "notes": "",
+      "resources": [
+        {
+          "title": "Python asyncio docs",
+          "url": "https://docs.python.org/3/library/asyncio.html"
+        }
+      ],
+      "addedDate": "2026-10-03",
+      "completedDate": "2026-10-03"
+    }
+  ],
   "weeklyTarget": 10
 }
