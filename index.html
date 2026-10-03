@@ -2118,35 +2118,28 @@ async function githubRead(){
 async function githubWrite(){
  if(!ghToken){setSync('local','Local auto-save');return;}
  if(ghBusy){ghPending=true;return;}
- ghBusy=true; ghPending=false; setSync('saving','Saving to GitHub…');
+ ghBusy=true; ghPending=false; setSync('saving','Saving to GitHub...');
  try{
-   // Always refresh SHA immediately before write to reduce conflicts across devices.
-   const current=await fetch(ghUrl(),{headers:ghHeaders()});
-   if(current.ok){const meta=await current.json();ghSha=meta.sha||''}
-   else if(current.status!==404)throw new Error(`GitHub read failed (${current.status})`);
-   const body={
-     message:'Auto-save Learning Hub progress',
-     content:utf8ToBase64(JSON.stringify(state,null,2)),
-     branch:ghConfig.branch
-   };
-   if(ghSha)body.sha=ghSha;
-   const putUrl=ghUrl().replace(/\?ref=.*$/,'');
-   const r=await fetch(putUrl,{
-     method:'PUT',
-     headers:{...ghHeaders(),'Content-Type':'application/json'},
-     body:JSON.stringify(body)
-   });
-   if(!r.ok){
-     let detail=''; try{detail=(await r.json()).message||''}catch(_){}
+   let attempts=0;
+   while(attempts<2){
+     attempts++;
+     const current=await fetch(ghUrl(),{headers:ghHeaders(),cache:'no-store'});
+     if(current.ok){const meta=await current.json();ghSha=meta.sha||'';}
+     else if(current.status===404){ghSha='';}
+     else throw new Error(`GitHub read failed (${current.status})`);
+     const body={message:'Auto-save Learning Library progress',content:utf8ToBase64(JSON.stringify(state,null,2)),branch:ghConfig.branch};
+     if(ghSha)body.sha=ghSha;
+     const putUrl=ghUrl().replace(/\?ref=.*$/,'');
+     const r=await fetch(putUrl,{method:'PUT',headers:{...ghHeaders(),'Content-Type':'application/json'},body:JSON.stringify(body)});
+     if(r.ok){const result=await r.json();ghSha=result.content?.sha||'';setSync('ok','Saved to GitHub');break;}
+     if(r.status===409 && attempts<2){ghSha='';await new Promise(resolve=>setTimeout(resolve,350));continue;}
+     let detail='';try{detail=(await r.json()).message||''}catch(_){}
      throw new Error(`GitHub sync failed (${r.status})${detail?': '+detail:''}`);
    }
-   const result=await r.json(); ghSha=result.content?.sha||'';
-   setSync('ok','Saved to GitHub');
- }catch(err){
-   console.error(err); setSync('error','GitHub sync failed');
- }finally{
+ }catch(err){console.error(err);setSync('error','GitHub sync failed');}
+ finally{
    ghBusy=false;
-   if(ghPending){ghPending=false;setTimeout(githubWrite,500)}
+   if(ghPending){ghPending=false;clearTimeout(ghTimer);ghTimer=setTimeout(()=>githubWrite(),350);}
  }
 }
 function queueGithubSave(){
