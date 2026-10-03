@@ -1,25 +1,6 @@
 {
   "items": [
     {
-      "id": "a1",
-      "title": "LangGraph fundamentals123",
-      "area": "Agentic AI",
-      "description": "Understand graphs, state, nodes and conditional edges.",
-      "status": "doing",
-      "estimate": 6,
-      "spent": 2,
-      "progress": 35,
-      "notes": "",
-      "resources": [
-        {
-          "title": "LangGraph documentation",
-          "url": "https://langchain-ai.github.io/langgraph/"
-        }
-      ],
-      "addedDate": "2026-10-03",
-      "completedDate": ""
-    },
-    {
       "id": "a2",
       "title": "Model Context Protocol",
       "area": "Agentic AI",
