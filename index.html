@@ -2082,7 +2082,11 @@ let ghConfig={...GH_DEFAULTS};
 let sortMode=localStorage.getItem('learning-hub.sort.v1')||'newest';
 try{ghConfig={...ghConfig,...JSON.parse(localStorage.getItem(GH_CONFIG_KEY)||'{}')}}catch(_){}
 let ghToken=sessionStorage.getItem(GH_TOKEN_KEY)||'';
-let ghSha='', ghTimer=null, ghBusy=false, ghPending=false, ghLoaded=false;
+let ghSha='', ghTimer=null, ghLoaded=false;
+let ghWorkerRunning=false;
+let ghPendingPayload=null;
+let ghPendingRevision=0;
+let ghSyncedRevision=0;
 function setSync(kind,text){
  const el=document.querySelector('#syncPill'); if(!el)return;
  el.className='top-icon sync-icon '+kind;
@@ -2115,44 +2119,104 @@ async function githubRead(){
  const data=await r.json(); ghSha=data.sha||'';
  return {data:JSON.parse(base64ToUtf8(data.content||'')),sha:data.sha};
 }
+async function refreshGithubSha(){
+ const r=await fetch(ghUrl(),{headers:ghHeaders(),cache:'no-store'});
+ if(r.status===404){ghSha='';return;}
+ if(!r.ok)throw new Error(`GitHub read failed (${r.status})`);
+ const meta=await r.json();
+ ghSha=meta.sha||'';
+}
+
+async function putGithubPayload(payload){
+ const body={
+   message:'Auto-save Learning Library progress',
+   content:utf8ToBase64(payload),
+   branch:ghConfig.branch
+ };
+ if(ghSha)body.sha=ghSha;
+
+ const putUrl=ghUrl().replace(/\?ref=.*$/,'');
+ const r=await fetch(putUrl,{
+   method:'PUT',
+   headers:{...ghHeaders(),'Content-Type':'application/json'},
+   body:JSON.stringify(body)
+ });
+
+ if(r.ok){
+   const result=await r.json();
+   // This SHA is authoritative for the next queued PUT in this session.
+   ghSha=result.content?.sha||'';
+   return {ok:true};
+ }
+ let detail='';
+ try{detail=(await r.json()).message||''}catch(_){}
+ return {ok:false,status:r.status,detail};
+}
+
+async function runGithubQueue(){
+ if(ghWorkerRunning||!ghToken)return;
+ ghWorkerRunning=true;
+
+ try{
+   // Only initialize SHA once. Normal queued writes chain from each PUT response.
+   if(!ghSha)await refreshGithubSha();
+
+   while(ghPendingPayload){
+     // Consume the newest pending snapshot. Any changes during this PUT simply
+     // replace ghPendingPayload and will become the next queue entry.
+     const payload=ghPendingPayload;
+     const revision=ghPendingRevision;
+     ghPendingPayload=null;
+
+     setSync('saving','Saving to GitHub…');
+     let result=await putGithubPayload(payload);
+
+     // External writer/device changed the file. Refresh once and retry the
+     // same newest snapshot using the repository's current SHA.
+     if(!result.ok && result.status===409){
+       await refreshGithubSha();
+       result=await putGithubPayload(payload);
+     }
+
+     if(!result.ok){
+       // Preserve the latest unsynced state for a later retry.
+       if(!ghPendingPayload){
+         ghPendingPayload=JSON.stringify(state,null,2);
+         ghPendingRevision=Math.max(ghPendingRevision,revision);
+       }
+       throw new Error(`GitHub sync failed (${result.status})${result.detail?': '+result.detail:''}`);
+     }
+
+     ghSyncedRevision=Math.max(ghSyncedRevision,revision);
+     setSync('ok',ghPendingPayload?'More changes pending…':'Saved to GitHub');
+   }
+ }catch(err){
+   console.error(err);
+   setSync('error','GitHub sync failed');
+ }finally{
+   ghWorkerRunning=false;
+ }
+}
+
 async function githubWrite(){
  if(!ghToken){setSync('local','Local auto-save');return;}
- if(ghBusy){ghPending=true;return;}
- ghBusy=true; ghPending=false; setSync('saving','Saving to GitHub…');
- try{
-   // Always refresh SHA immediately before write to reduce conflicts across devices.
-   const current=await fetch(ghUrl(),{headers:ghHeaders()});
-   if(current.ok){const meta=await current.json();ghSha=meta.sha||''}
-   else if(current.status!==404)throw new Error(`GitHub read failed (${current.status})`);
-   const body={
-     message:'Auto-save Learning Hub progress',
-     content:utf8ToBase64(JSON.stringify(state,null,2)),
-     branch:ghConfig.branch
-   };
-   if(ghSha)body.sha=ghSha;
-   const putUrl=ghUrl().replace(/\?ref=.*$/,'');
-   const r=await fetch(putUrl,{
-     method:'PUT',
-     headers:{...ghHeaders(),'Content-Type':'application/json'},
-     body:JSON.stringify(body)
-   });
-   if(!r.ok){
-     let detail=''; try{detail=(await r.json()).message||''}catch(_){}
-     throw new Error(`GitHub sync failed (${r.status})${detail?': '+detail:''}`);
-   }
-   const result=await r.json(); ghSha=result.content?.sha||'';
-   setSync('ok','Saved to GitHub');
- }catch(err){
-   console.error(err); setSync('error','GitHub sync failed');
- }finally{
-   ghBusy=false;
-   if(ghPending){ghPending=false;setTimeout(githubWrite,500)}
- }
+ // Public compatibility entry point: enqueue newest state, don't start
+ // independent concurrent writes.
+ ghPendingPayload=JSON.stringify(state,null,2);
+ ghPendingRevision++;
+ await runGithubQueue();
 }
 function queueGithubSave(){
  if(!ghToken){setSync('local','Local auto-save');return;}
- clearTimeout(ghTimer); setSync('saving','Pending sync…');
- ghTimer=setTimeout(githubWrite,1400);
+
+ // Always replace pending content with the newest full application state.
+ // Multiple rapid UI changes collapse into one queued GitHub write.
+ ghPendingPayload=JSON.stringify(state,null,2);
+ ghPendingRevision++;
+ setSync('saving',ghWorkerRunning?'Change queued…':'Sync pending…');
+
+ clearTimeout(ghTimer);
+ ghTimer=setTimeout(()=>runGithubQueue(),900);
 }
 async function loadGithubState(){
  if(ghLoaded)return; ghLoaded=true;
@@ -2331,12 +2395,15 @@ function openGithubSettings(){
    ghToken=document.querySelector('#ghToken').value.trim();
    if(!ghConfig.owner||!ghConfig.repo)return alert('Owner and repository are required.');
    localStorage.setItem(GH_CONFIG_KEY,JSON.stringify(ghConfig));
+   ghSha=''; ghPendingPayload=null;
    if(ghToken)sessionStorage.setItem(GH_TOKEN_KEY,ghToken);else sessionStorage.removeItem(GH_TOKEN_KEY);
    const status=document.querySelector('#ghStatus'); status.textContent='Testing GitHub connection…';
    try{
      const result=await githubRead();
      status.textContent=result.missing?'Connected. Progress file will be created.':'Connected successfully.';
-     await githubWrite();
+     ghPendingPayload=JSON.stringify(state,null,2);
+     ghPendingRevision++;
+     await runGithubQueue();
      setTimeout(()=>{closeModal();render()},450);
    }catch(err){console.error(err);status.textContent=err.message;setSync('error','GitHub connection failed')}
  };
@@ -2390,6 +2457,15 @@ document.querySelector('#side').onclick=e=>{const b=e.target.closest('[data-area
 document.querySelector('#overlay').onclick=e=>{if(e.target.id==='overlay')closeModal()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.querySelector('#libraryDrawer').classList.contains('on'))closeLibrary()});
 document.querySelector('#exportBtn').onclick=()=>{const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='learning-hub-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)};
+document.addEventListener('visibilitychange',()=>{
+ if(document.visibilityState==='hidden'&&ghToken&&ghPendingPayload&&!ghWorkerRunning){
+   clearTimeout(ghTimer);runGithubQueue();
+ }
+});
+window.addEventListener('pagehide',()=>{
+ if(ghToken&&ghPendingPayload&&!ghWorkerRunning){clearTimeout(ghTimer);runGithubQueue();}
+});
+
 localStorage.setItem(KEY,JSON.stringify(state));
 render();
 loadGithubState().then(()=>render());
