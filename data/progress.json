@@ -1,25 +1,6 @@
 {
   "items": [
     {
-      "id": "a3",
-      "title": "Kubernetes architecture",
-      "area": "Kubernetes",
-      "description": "Control plane, nodes, pods and core Kubernetes objects.",
-      "status": "todo",
-      "estimate": 7,
-      "spent": 0,
-      "progress": 0,
-      "notes": "",
-      "resources": [
-        {
-          "title": "Kubernetes Concepts",
-          "url": "https://kubernetes.io/docs/concepts/"
-        }
-      ],
-      "addedDate": "2026-10-03",
-      "completedDate": ""
-    },
-    {
       "id": "a4",
       "title": "Python async programming",
       "area": "Python Advanced",
